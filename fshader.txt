@@ -1,0 +1,59 @@
+#version 430
+
+layout(location=2) uniform vec4 lightPos1;
+layout(location=7) uniform vec4 lightPos2;
+layout(location=3) uniform vec4 userPos;
+layout(location=4) uniform sampler2D texture;
+layout(location=5) uniform float maskPercentage;
+layout(location=6) uniform vec2 scroll;
+
+
+in vec4 fcolor;
+in vec4 fpos;
+in vec4 fnorm;
+in vec2 ftext;
+
+out vec4 gli_FragColor;
+
+void main() {
+
+	vec4 finalColor=fcolor;
+	
+	float amb=0.2f;	
+	float diffuse=0.0f;
+	
+	vec4 black=vec4(0.0f,0.0f,0.0f,1.0f);
+	if(texture2D(texture, ftext).a != 1.0f)
+    {
+        discard;
+    }
+	vec2 ftextresult = ftext + scroll;
+	vec4 textColor=texture2D(texture,ftextresult);
+
+	if(textColor!=black){
+		finalColor=maskPercentage*textColor+(1.0-maskPercentage)*finalColor;
+	} else {
+		finalColor=black;
+	}
+	
+	vec4 L1=normalize(lightPos1-fpos);
+	vec4 L2=normalize(lightPos2-fpos);
+	float I=1.0f;
+	float K=1.0f;
+	
+	diffuse=(I*K*max(dot(L1,fnorm),0.0f) + I*K*max(dot(L2,fnorm),0.0f));
+	
+	float specular=0.0f;
+	vec4 R1 = reflect(-L1,fnorm);
+	vec4 R2 = reflect(-L2,fnorm);
+	vec4 V = normalize(userPos-fpos);
+	
+	int n = 256;
+	float Is = 1.0f;
+	float Ks = 1.0f;
+
+	specular= (Is*Ks*pow(max(dot(R1,V),0.0f),n) + Is*Ks*pow(max(dot(R2,V),0.0f),n));
+	
+	gli_FragColor = (finalColor)*(amb+diffuse+specular);
+	
+}

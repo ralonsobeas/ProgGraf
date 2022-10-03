@@ -151,10 +151,55 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="background.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="collider.cpp" />
+    <ClCompile Include="cube.cpp" />
+    <ClCompile Include="inputManager.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="loaderOBJ.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="object.cpp" />
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="scene.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="spatialHashing.cpp" />
+    <ClCompile Include="system.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="background.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="collider.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="cube.h" />
+    <ClInclude Include="inputManager.h" />
+    <ClInclude Include="item.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="loaderOBJ.hpp" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="render.h" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="spatialHashing.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="system.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="background.trg" />
+    <None Include="bullet.trg" />
+    <None Include="cube.trg" />
+    <None Include="item.trg" />
+    <None Include="triangle.trg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fshader.txt" />
+    <Text Include="vshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
