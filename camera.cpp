@@ -50,26 +50,37 @@ void Camera::step()
 {
 	if (InputManager::keys['F'])
 	{
-		position.x -= 0.01f;
-		lookAt.x -= 0.01f;
+		position.x -= 1.f;
+		lookAt.x -= 1.f;
 	}
 
 	if (InputManager::keys['H'])
 	{
-		position.x += 0.01f;
-		lookAt.x += 0.01f;
+		position.x += 1.f;
+		lookAt.x += 1.f;
 	}
 	if (InputManager::keys['T'])
 	{
-		position.y += 0.01f;
-		lookAt.y += 0.01f;
+		position.y += 1.f;
+		lookAt.y += 1.f;
 	}
 
 	if (InputManager::keys['G'])
 	{
-		position.y -= 0.01f;
-		lookAt.y -= 0.01f;
+		position.y -= 1.f;
+		lookAt.y -= 1.f;
 	}
+	if (InputManager::keys['E'])
+	{
+		position.z += 1.f;
+		lookAt.z += 1.f;
+	}
+	if (InputManager::keys['Q'])
+	{
+		position.z -= 1.f;
+		lookAt.z -= 1.f;
+	}
+
 
 }
 

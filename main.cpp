@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		std::cout << "ERROR iniciando glew\n";
 
 	InputManager::init(window);
-	Object* cube = new Cube("triangle.trg");
+	Object* cube = new Cube("warehouse_OBJ.trg");
 	cube->scale = glm::vec3(0.5f, 0.5f, 0.5f);
 	cube->position.z = 5.0f;
 
