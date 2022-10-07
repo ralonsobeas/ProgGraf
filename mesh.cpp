@@ -10,30 +10,38 @@ Mesh::Mesh(){
 	faceList=new std::vector<int>();
 
 //añadir vértices
+	int size = 10;
 
 
-
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
-			vertex_t v1, v2, v3, v4;
-
-			v1.posicion = glm::vec4(0.0f + x, 0.0f + y, 0.0f, 1.0f);
-			v2.posicion = glm::vec4(0.0f + x, 1.0f + y, 0.0f, 1.0f);
-			v3.posicion = glm::vec4(1.0f + x, 1.0f + y, 0.0f, 1.0f);
-			v4.posicion = glm::vec4(1.0f + x, 0.0f + y, 0.0f, 1.0f);
-
+	for (int x = 0; x <= size; x++) {
+		for (int y = 0; y <= size; y++) {
+			vertex_t v1;
+			v1.posicion = glm::vec4(0.0f + y, 0.0f + x, 0.0f, 1.0f);
 			vertexList->push_back(v1);
-			vertexList->push_back(v2);
-			vertexList->push_back(v3);
-			vertexList->push_back(v4);
-
-			faceList->push_back(0 + y * 4 + x * 10 * 4);
-			faceList->push_back(1 + y * 4 + x * 10 * 4);
-			faceList->push_back(2 + y * 4 + x * 10 * 4);
-			faceList->push_back(0 + y * 4 + x * 10 * 4);
-			faceList->push_back(2 + y * 4 + x * 10 * 4);
-			faceList->push_back(3 + y * 4 + x * 10 * 4);
 		}
+		for (int y = 0; y < size; y++) {
+			if (x == 0)
+				break;
+			if (x == 1) {
+				faceList->push_back(y);
+				faceList->push_back(1 + y);
+				faceList->push_back(x * size + 1 + y);
+			}
+			else {
+				faceList->push_back(y + ((x - 1) * size) + x - 1);
+				faceList->push_back(y + ((x - 1) * size) + x);
+				faceList->push_back(x * size + 1 + y + x - 1);
+			}
+			
+		}
+		for (int y = 0; y < size; y++) {
+			if (x == 0)
+				break;
+			faceList->push_back(y + ((x - 1) * size) + x);
+			faceList->push_back(x * size + y + x);
+			faceList->push_back(x * size + y + x + 1);
+		}
+		
 	}
 	/*
 	std::string vshader = "vshader.txt";

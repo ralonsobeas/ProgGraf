@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		std::cout << "ERROR iniciando glew\n";
 
 	InputManager::init(window);
-	Object* cube = new Cube("triangle.trg");
+	Object* cube = new Cube();
 	cube->scale = glm::vec3(0.5f, 0.5f, 0.5f);
 	cube->position.z = 5.0f;
 
@@ -67,6 +67,7 @@ int main(int argc, char** argv)
 	{
 
 		if (renderfps(60.0f)) {
+			render->setupObject(cube);
 			scene->step(0.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(0.67, 0.89, 0.89, 1);

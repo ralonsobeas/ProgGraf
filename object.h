@@ -30,7 +30,5 @@ public:
 	virtual void step();
 	virtual void hitResponse();
 	virtual void setFireType(int fire);
-
-	void changePosition();
 	
 };
