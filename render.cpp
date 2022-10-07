@@ -125,6 +125,9 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	//glEnable(GL_ALPHA_TEST);
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);    // Enable depth test
+	glDepthFunc(GL_LEQUAL);     // Accept fragment if it closer to the camera than the former one
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 
 	glDrawElements(GL_TRIANGLES, obj->mesh->faceList->size(), GL_UNSIGNED_INT,nullptr);
