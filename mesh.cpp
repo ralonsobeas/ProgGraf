@@ -8,21 +8,48 @@ Mesh::Mesh(){
 
 	vertexList=new std::vector<vertex_t>();
 	faceList=new std::vector<int>();
+
 //añadir vértices
 
-	vertex_t v1,v2,v3;
-	
-	v1.posicion=glm::vec4(-0.5f,-0.5,0.0f,1.0f);
-	v2.posicion=glm::vec4( 0.0f, 0.5,0.0f,1.0f);
-	v3.posicion=glm::vec4( 0.5f,-0.5,0.0f,1.0f);
-	
-	vertexList->push_back(v1);
-	vertexList->push_back(v2);
-	vertexList->push_back(v3);
-	
-	faceList->push_back(0);
-	faceList->push_back(1);
-	faceList->push_back(2);
+
+
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 10; y++) {
+			vertex_t v1, v2, v3, v4;
+
+			v1.posicion = glm::vec4(0.0f + x, 0.0f + y, 0.0f, 1.0f);
+			v2.posicion = glm::vec4(0.0f + x, 1.0f + y, 0.0f, 1.0f);
+			v3.posicion = glm::vec4(1.0f + x, 1.0f + y, 0.0f, 1.0f);
+			v4.posicion = glm::vec4(1.0f + x, 0.0f + y, 0.0f, 1.0f);
+
+			vertexList->push_back(v1);
+			vertexList->push_back(v2);
+			vertexList->push_back(v3);
+			vertexList->push_back(v4);
+
+			faceList->push_back(0 + y * 4 + x * 10 * 4);
+			faceList->push_back(1 + y * 4 + x * 10 * 4);
+			faceList->push_back(2 + y * 4 + x * 10 * 4);
+			faceList->push_back(0 + y * 4 + x * 10 * 4);
+			faceList->push_back(2 + y * 4 + x * 10 * 4);
+			faceList->push_back(3 + y * 4 + x * 10 * 4);
+		}
+	}
+	/*
+	std::string vshader = "vshader.txt";
+	std::string fshader = "fshader.txt";
+	std::string textureFile = "data/front.png";
+
+	shader = new GLShader(vshader, fshader);
+	tex = new Texture(textureFile);
+	*/
+
+	std::string vshader = "vshader.txt";
+	std::string fshader = "fshader.txt";
+	std::string textureFile = "data/front.png";
+
+	shader = new GLShader(vshader, fshader);
+	tex = new Texture(textureFile);
 }
 
 
@@ -33,6 +60,7 @@ Mesh::Mesh(std::string fileName){
 //añadir vértices
 	loadFromFile(fileName);
 }
+
 
 
 

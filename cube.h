@@ -4,6 +4,8 @@
 
 class Cube: public Object{
 public:
-	Cube(std::string fileName):Object(fileName){typeObject=CUBE_OBJ;};
+	//Cube(std::string fileName):Object(fileName){typeObject=CUBE_OBJ;};
+	Cube() :Object() { typeObject = CUBE_OBJ; };
+
 	virtual void step() override;
 };

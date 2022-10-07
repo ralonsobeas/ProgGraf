@@ -12,9 +12,14 @@ Object::Object()
 	this->mesh=new Mesh();
 	this->position=glm::vec4(0.0f,0.0f,0.0f,1.0f);
 	this->modelMatrix=glm::mat4(1.0f);
+	this->shader = mesh->shader;
+	/*
 	this->mesh->setColor(0,glm::vec4(1.0f,0.0f,0.0f,1.0f));
 	this->mesh->setColor(1,glm::vec4(0.0f,1.0f,0.0f,1.0f));
 	this->mesh->setColor(2,glm::vec4(0.0f,0.0f,1.0f,1.0f));
+	*/
+	//this->mesh->setColor(3, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
 	this->collider=new Collider(this);
 
 }
@@ -73,4 +78,16 @@ void Object::hitResponse() {
 
 void Object::setFireType(int fire) {
 
+}
+
+void Object::changePosition() {
+	std::vector<vertex_t>*  vertexList =this -> mesh -> vertexList;
+
+	//Cambiar vértices
+
+	for (int x = 0; x < 100; x++) {
+		glm::vec4 posicionOriginal = vertexList->at(x).posicion;
+		glm::vec4 posicionFinal = glm::vec4(posicionOriginal.x, posicionOriginal.y+1, posicionOriginal.z, posicionOriginal.w);
+		vertexList->at(x).posicion = posicionFinal;	
+	}
 }

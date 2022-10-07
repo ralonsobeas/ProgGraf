@@ -20,4 +20,5 @@ public:
 	~Mesh();
 	void loadFromFile(std::string fileName);
 	void setColor(int idxVertex, glm::vec4 color);
+	//void drawSquare(double x1, double y1, double sidelength);
 };
