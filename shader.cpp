@@ -60,9 +60,11 @@ void GLShader::compileShaders(){
 	this->programID = glCreateProgram();
 	std::string vertexCode=readFile(vshader);
 	std::string fragmentCode=readFile(fshader);
+	std::string computeCode = readFile("cshader.txt");
 	
 	const char* v=vertexCode.c_str();
 	const char* f=fragmentCode.c_str();
+	const char* c=computeCode.c_str();
 
 	int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShaderID , 1, &v, nullptr);
@@ -75,12 +77,24 @@ void GLShader::compileShaders(){
 	glCompileShader(fragmentShaderID );
 	
 	checkCompileError(fragmentShaderID);
+
+	int computeShaderID = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(computeShaderID, 1, &c, nullptr);
+	glCompileShader(computeShaderID);
+
+	checkCompileError(computeShaderID);
+
+	this->computeProgramID = glCreateProgram();
+	glAttachShader(computeProgramID, computeShaderID);
+	
 	
 	glAttachShader(programID, vertexShaderID );
 	glAttachShader(programID, fragmentShaderID );
 	
 	glLinkProgram(programID);
+	glLinkProgram(computeProgramID);
 	
 	checkLinkError(programID);
+	checkLinkError(computeProgramID);
 
 }

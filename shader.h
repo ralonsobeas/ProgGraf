@@ -4,6 +4,7 @@
 class GLShader{
 public:
 	unsigned int programID=0xFFFFFFFF;
+	unsigned int computeProgramID = 0xFFFFFFFF;
 	std::string vshader,fshader;
 	
 	void checkCompileError(unsigned int program);

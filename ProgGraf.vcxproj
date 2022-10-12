@@ -198,6 +198,7 @@
     <None Include="triangle.trg" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="cshader.txt" />
     <Text Include="fshader.txt" />
     <Text Include="vshader.txt" />
   </ItemGroup>

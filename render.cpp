@@ -68,6 +68,28 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	glBindBuffer(GL_ARRAY_BUFFER, bo.vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bo.ibo);
 
+	int data[8] = { 1,2,3,4,5,6,7,9 };
+	GLuint ssbo;
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+	glGetNamedBufferSubData(0, 0, sizeof(data), data);
+	/*
+	glBindBuffer(GL_UNIFORM_BUFFER, ssbo);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 3, ssbo);
+	int uniformIndex = glGetUniformBlockIndex(obj->shader->computeProgramID, "datosVertices");
+	glUniformBlockBinding(obj->shader->computeProgramID, uniformIndex, 3);
+	glGetNamedBufferSubData(0, 0, sizeof(data), data);
+	*/
+
+	glUseProgram(obj->shader->computeProgramID);
+	glDispatchCompute(ceil(640 / 8), ceil(480 / 4), 1);
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+	printf("%d %d %d %d %d %d %d %d\n", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+
 
 	glUseProgram(obj->shader->programID);
 	unsigned int vpos=0;
