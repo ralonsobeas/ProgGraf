@@ -39,7 +39,7 @@ void Cube::changePosition() {
 	//Cambiar vértices
 	for (int x = 0; x < vertexList->size()/2; x++) {
 		//printf("%d %f ", x, vertexList->at(x).posicion.y);
-		vertexList->at(x).posicion.y += 0.01;
+		vertexList->at(x).posicion.y -= 0.01;
 	}
 }
 

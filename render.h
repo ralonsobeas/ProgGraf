@@ -9,6 +9,7 @@ typedef struct bufferObject_t{
 	unsigned int abo; //array buffer object ID
 	unsigned int vbo; //vertex bufferObject
 	unsigned int ibo; //idx bufferObje
+	unsigned int ssbo;
 
 }bufferObject_t;
 
@@ -25,6 +26,7 @@ public:
 	void drawObject(Object* obj);
 	void drawScene(Scene* scene);
 	void setupObject(Object* obj);
+	void updateObject(Object* obj);
 	void drawObjectGL4(Object* obj, Scene* scene);
 };
 

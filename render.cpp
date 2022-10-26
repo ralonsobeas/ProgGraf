@@ -15,18 +15,32 @@ void Render::setupObject(Object* obj)
 	glGenVertexArrays(1, &bo.abo);
 	glBindVertexArray(bo.abo);
 	
+	glGenBuffers(1,&bo.ssbo);
 	glGenBuffers(1,&bo.vbo);
 	glGenBuffers(1,&bo.ibo);
 
-	glBindBuffer(GL_ARRAY_BUFFER,bo.vbo);
-	glBufferData(GL_ARRAY_BUFFER,sizeof(vertex_t)*obj->mesh->vertexList->size(),
-					obj->mesh->vertexList->data(),GL_STATIC_DRAW);
-					
+	glBindBuffer(GL_ARRAY_BUFFER,bo.vbo);			
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,bo.ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(int)*obj->mesh->faceList->size(),
-					obj->mesh->faceList->data(),GL_STATIC_DRAW);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,bo.ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, bo.ssbo);
+
+	int data[8] = { 1,2,3,4,5,6,7,6 };
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
 
 	boList[obj->id]=bo;	
+}
+
+void Render::updateObject(Object* obj) {
+	//int data[8];
+	//glGetNamedBufferSubData(1, 0, sizeof(data), data);
+	//data[0]++;
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_t) * obj->mesh->vertexList->size(),
+		obj->mesh->vertexList->data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * obj->mesh->faceList->size(),
+		obj->mesh->faceList->data(), GL_STATIC_DRAW);
+	//glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
+
 }
 
 
@@ -61,37 +75,24 @@ void Render::drawObject(Object* obj){
 
 void Render::drawObjectGL4(Object* obj, Scene *scene){
 	obj->computeMatrix();
+	updateObject(obj);
 	
 	bufferObject_t bo=boList[obj->id];
 	
 	glBindVertexArray(bo.abo);
 	glBindBuffer(GL_ARRAY_BUFFER, bo.vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bo.ibo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
 
-	int data[8] = { 1,2,3,4,5,6,7,9 };
-	GLuint ssbo;
-	glGenBuffers(1, &ssbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
-	glGetNamedBufferSubData(0, 0, sizeof(data), data);
-	/*
-	glBindBuffer(GL_UNIFORM_BUFFER, ssbo);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, 3, ssbo);
-	int uniformIndex = glGetUniformBlockIndex(obj->shader->computeProgramID, "datosVertices");
-	glUniformBlockBinding(obj->shader->computeProgramID, uniformIndex, 3);
-	glGetNamedBufferSubData(0, 0, sizeof(data), data);
-	*/
+	int data[8];
+	glGetNamedBufferSubData(1, 0, sizeof(data), data);
 
 	glUseProgram(obj->shader->computeProgramID);
-	glDispatchCompute(ceil(640 / 8), ceil(480 / 4), 1);
+	glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-	printf("%d %d %d %d %d %d %d %d\n", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-
-
 	glUseProgram(obj->shader->programID);
+
 	unsigned int vpos=0;
 	glEnableVertexAttribArray(vpos);
 	glVertexAttribPointer(vpos,4,GL_FLOAT,GL_FALSE,sizeof(vertex_t),(void*)offsetof(vertex_t,posicion));
@@ -152,8 +153,8 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
-
 	glDrawElements(GL_TRIANGLES, obj->mesh->faceList->size(), GL_UNSIGNED_INT,nullptr);
+	printf("%d %d %d %d %d %d %d %d\n", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
 }
 
 
