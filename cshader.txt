@@ -38,4 +38,12 @@ void main()
 		//pixel = vec4((normalize(intersection - sphere_c) + 1.0) / 2.0, 1.0);
 	//}
 	//imageStore(screen, pixel_coords, pixel);
+
+	old_posicion[gl_GlobalInvocationID.x] = posicion[gl_GlobalInvocationID.x];
+	float time = 0.0f;
+	
+	time += tiempo;
+	vec4 pos = posicion[gl_GlobalInvocationID.x];
+	//posicion[gl_GlobalInvocation.x] = posicion[gl_GlobalInvocation.x] * 2 - old_posicion[gl_GlobalInvocationID.x] + aceleracion[gl_GlobalInvocationID.x] * time * time;
+	old_posicion[gl_GlobalInvocationID.x] = pos;
 }
