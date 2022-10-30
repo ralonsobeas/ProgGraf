@@ -3,11 +3,18 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D screen;
 layout(std430, binding = 3) buffer SSBO
 {
-    int data_SSBO[];
+	float tiempo;
+	int control;
+    vec4 posicion[100];		//***
+	vec4 aceleracion[100];
+	int adyacentes[100][8];
 };
+
+	vec4 old_posicion[100]; //***
+
 void main()
 {
-	data_SSBO[1]++;
+	//data_SSBO[1]++;
 
 	//vec4 pixel = vec4(0.075, 0.133, 0.173, 1.0);
 	//ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);

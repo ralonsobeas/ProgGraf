@@ -26,6 +26,7 @@ void Render::setupObject(Object* obj)
 
 	int data[8] = { 1,2,3,4,5,6,7,6 };
 	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
+	//glBufferSubData();
 
 	boList[obj->id]=bo;	
 }
