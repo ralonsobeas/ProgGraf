@@ -20,7 +20,7 @@ Mesh::Mesh(){
 			
 			vertex_t v1;
 			v1.posicion = glm::vec4(0.0f + y, 0.0f + x, 0.0f, 1.0f);
-			for (int j = 0; j < 8; j++) {
+			//for (int j = 0; j < 8; j++) {
 				v1.verticesAdyacentes[0] = y + (x - 1) * size - 1;
 				v1.verticesAdyacentes[1] = y + (x - 1) * size;
 				v1.verticesAdyacentes[2] = y + (x - 1) * size + 1;
@@ -31,28 +31,28 @@ Mesh::Mesh(){
 				v1.verticesAdyacentes[7] = y + (x + 1) * size + 1;
 				if (y == 0) {
 					v1.verticesAdyacentes[0] = -1;
-					v1.verticesAdyacentes[1] = -1;
-					v1.verticesAdyacentes[2] = -1;
-				}
-				else if (y == size - 1) {
-					v1.verticesAdyacentes[5] = -1;
-					v1.verticesAdyacentes[6] = -1;
-					v1.verticesAdyacentes[7] = -1;
-				}
-				if (x == 0) {
-					v1.verticesAdyacentes[0] = -1;
 					v1.verticesAdyacentes[3] = -1;
 					v1.verticesAdyacentes[5] = -1;
 				}
-				else if (x == size - 1) {
+				else if (y == size - 1) {
 					v1.verticesAdyacentes[2] = -1;
 					v1.verticesAdyacentes[4] = -1;
 					v1.verticesAdyacentes[7] = -1;
 				}
+				if (x == 0) {
+					v1.verticesAdyacentes[0] = -1;
+					v1.verticesAdyacentes[1] = -1;
+					v1.verticesAdyacentes[2] = -1;
+				}
+				else if (x == size - 1) {
+					v1.verticesAdyacentes[5] = -1;
+					v1.verticesAdyacentes[6] = -1;
+					v1.verticesAdyacentes[7] = -1;
+				}
 				
-			}
+			//}
 			i++;
-			v1.verticesAdyacentes[0] = 0;
+			//v1.verticesAdyacentes[0] = 0;
 			vertexList->push_back(v1);
 		}
 		//Cuadrado a cuadrado creando triangulos

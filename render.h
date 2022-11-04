@@ -19,6 +19,7 @@ private:
 	glm::mat4 view=glm::mat4(1.0f);
 	glm::mat4 proj=glm::mat4(1.0f);
 	std::map<int, bufferObject_t> boList;
+	int ayudapls = 0;
 
 public:
 	Render();

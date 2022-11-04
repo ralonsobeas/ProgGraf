@@ -3,6 +3,16 @@
 #include "system.h"
 
 
+typedef struct vertexRecibido_t {
+
+	float tiempo;
+	int control;
+	float posicion[4];
+	float aceleracion[4];
+	int verticesAdyacentes[8];
+
+}vertexRecibido_t;
+
 Render::Render(){
 	glEnable(GL_DEPTH_TEST);
 }
@@ -24,23 +34,35 @@ void Render::setupObject(Object* obj)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,bo.ssbo);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, bo.ssbo);
 
-	int data[8] = { 1,2,3,4,5,6,7,6 };
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
-	//glBufferSubData();
+	
+	vertex_t* temp = obj->mesh->vertexList->data();
 
-	boList[obj->id]=bo;	
+	vertexRecibido_t templist1[100];
+	for (int i = 0; i < 100; i++) {
+		templist1[i].posicion[0] = temp[i].posicion.x;
+		templist1[i].posicion[1] = temp[i].posicion.y;
+		templist1[i].posicion[2] = temp[i].posicion.z;
+		templist1[i].posicion[3] = temp[i].posicion.w;
+		templist1[i].aceleracion[0] = 0;
+		templist1[i].aceleracion[1] = 0;
+		templist1[i].aceleracion[2] = 0;
+		templist1[i].aceleracion[3] = 0;
+		for (int j = 0; j < 8; j++) {
+			templist1[i].verticesAdyacentes[j] = temp[i].verticesAdyacentes[j];
+			//printf("%d %d %d\n",i, j, templist1[i].verticesAdyacentes[j]);
+		}
+		templist1[i].control = 0;
+		templist1[i].tiempo = 5;
+	}
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(vertexRecibido_t)*100, templist1, GL_DYNAMIC_DRAW);
+	boList[obj->id]=bo;
 }
 
 void Render::updateObject(Object* obj) {
-	//int data[8];
-	//glGetNamedBufferSubData(1, 0, sizeof(data), data);
-	//data[0]++;
-
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_t) * obj->mesh->vertexList->size(),
 		obj->mesh->vertexList->data(), GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * obj->mesh->faceList->size(),
 		obj->mesh->faceList->data(), GL_STATIC_DRAW);
-	//glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_DYNAMIC_DRAW);
 
 }
 
@@ -85,8 +107,9 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bo.ibo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
 
-	int data[8];
-	glGetNamedBufferSubData(1, 0, sizeof(data), data);
+	vertexRecibido_t data[100];
+	glGetNamedBufferSubData(1, 0, sizeof(vertexRecibido_t) * 100, data);
+
 
 	glUseProgram(obj->shader->computeProgramID);
 	glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
@@ -155,7 +178,8 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
 	glDrawElements(GL_TRIANGLES, obj->mesh->faceList->size(), GL_UNSIGNED_INT,nullptr);
-	printf("%d %d %d %d %d %d %d %d\n", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+	printf("%f %d %f %f %f %f %f %f %d %d %d\n", data[ayudapls].tiempo, data[ayudapls].control, data[ayudapls].posicion[0], data[ayudapls].posicion[1], data[ayudapls].posicion[2], data[ayudapls].aceleracion[0], data[ayudapls].aceleracion[1], data[ayudapls].aceleracion[2], data[ayudapls].verticesAdyacentes[0], data[ayudapls].verticesAdyacentes[1], data[ayudapls].verticesAdyacentes[2]);
+	ayudapls++;
 }
 
 
