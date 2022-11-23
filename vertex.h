@@ -11,6 +11,6 @@ typedef struct vertex_t{
 	glm::vec4 color;
 	glm::vec4 normal;
 	glm::vec2 texCoord;
-	int verticesAdyacentes[8];
+	int vecinosCercanos[8];
 
 }vertex_t;

@@ -2,7 +2,6 @@
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D screen;
 struct matStruct {
-	float tiempo;
 	int control;
     float posicion[4];
 	float aceleracion[4];
@@ -11,12 +10,14 @@ struct matStruct {
 
 layout(binding = 3) buffer SSBO
 {
+	float tiempo;
+	float constMuelle;
 	matStruct myarray[];
 };
 
 void main()
 {
-	myarray[10].tiempo = 100;
+	tiempo = 10;
 	myarray[5].control = 999;
 	//data_SSBO[1]++;
 
