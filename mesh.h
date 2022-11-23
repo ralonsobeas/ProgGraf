@@ -6,11 +6,21 @@
 #include "shader.h"
 #include "texture.h"
 
+typedef struct vertexFisico_t {
+
+	int control;
+	float posicion[4];
+	float aceleracion[4];
+	int vecinosCercanos[8];
+
+}vertexFisico_t;
+
 class Mesh{
 
 public:
 //atributos
 	std::vector<vertex_t>* vertexList;
+	vertexFisico_t vertexFisica[100];
 	std::vector<int>* faceList;
 	GLShader* shader;
 	Texture* tex = nullptr;

@@ -17,9 +17,11 @@ layout(binding = 3) buffer SSBO
 
 void main()
 {
-	tiempo = 10;
-	myarray[5].control = 999;
-	//data_SSBO[1]++;
+	tiempo += 0.1;
+	myarray[1].control=1;
+	myarray[1].posicion[0]+=0.001;
+	myarray[1].posicion[2]+=0.001;
+
 
 	//vec4 pixel = vec4(0.075, 0.133, 0.173, 1.0);
 	//ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
