@@ -57,7 +57,12 @@ void Render::updateObject(Object* obj) {
 	glGetNamedBufferSubData(1, sizeof(float), sizeof(float), constMuelle);
 	glGetNamedBufferSubData(1, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
 	printf("%f %f\n", *tiempo, *constMuelle);
-	printf("%d %f %f %f %f %f %f %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0], obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0], obj->mesh->vertexFisica[ayudapls].aceleracion[1], obj->mesh->vertexFisica[ayudapls].aceleracion[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[0], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[1], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2]);
+	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
+		, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]
+		, obj->mesh->vertexFisica[ayudapls].aceleracion[1], obj->mesh->vertexFisica[ayudapls].aceleracion[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[0]
+		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[1], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2]
+		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[3], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[4], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[5]
+		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[6], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[7]);
 	ayudapls++;
 	if (ayudapls >= 100) {
 		ayudapls = 0;
