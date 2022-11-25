@@ -23,7 +23,7 @@ void Render::setupObject(Object* obj)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,bo.ssbo);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, bo.ssbo);
 
-	
+
 	vertex_t* temp = obj->mesh->vertexList->data();
 	float *tiempo = new float(69);
 	float* constante = new float(420);
@@ -122,7 +122,9 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
 
 	glUseProgram(obj->shader->computeProgramID);
-	glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
+	//glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
+	// Dividir Shader en work groups uno por cada particula (SE DEBE CAMBIAR PARA CALCULO SI SE CAMBIA EL TAMAÑO DE TELA)
+	glDispatchCompute((unsigned int)10, (unsigned int)10, (unsigned int)1);
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	glUseProgram(obj->shader->programID);
