@@ -32,6 +32,7 @@ void main()
 	float cteMuelleHorizontal = 0.0001;
 	float cteMuelleVertical = 0.0001;
 	float cteMuelleDiagonal = 0.00001;
+	float cteMuelleBending = 0.000001;
 
 	// Gravedad
 	fuerza = gravedad * pesoParticula;
@@ -82,6 +83,41 @@ void main()
 	idVecina = particula.adyacentes[7];
 	if(idVecina!=-1){
 		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal);
+	}
+
+	// Intento cálculo Bending
+	// Vecina 1 HORIZONTAL
+	idVecina = particula.adyacentes[1];
+	int idBending;
+	if(idVecina!=-1){
+		idBending = myarray[idVecina].adyacentes[1]; 
+		if(idBending!=-1){
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+		}
+	}
+	// Vecina 6 HORIZONTAL
+	idVecina = particula.adyacentes[6];
+	if(idVecina!=-1){
+		idBending = myarray[idVecina].adyacentes[6]; 
+		if(idBending!=-1){
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+		}
+	}
+	// Vecina 3 VERTICAL 
+	idVecina = particula.adyacentes[3];
+	if(idVecina!=-1){
+		idBending = myarray[idVecina].adyacentes[3]; 
+		if(idBending!=-1){
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+		}
+	}
+	// Vecina 4 VERTICAL 
+	idVecina = particula.adyacentes[4];
+	if(idVecina!=-1){
+		idBending = myarray[idVecina].adyacentes[4]; 
+		if(idBending!=-1){
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+		}
 	}
 
 	// Cambiar posición
@@ -160,3 +196,4 @@ vec3 calcularMuelle(int idVecina, vec3 posicionParticula, float cteMuelle){
 		
 	return -cteMuelle * (posicionParticula - posicionVecina);
 }
+
