@@ -2,6 +2,9 @@
 #include "background.h"
 #include "system.h"
 
+//ARREGLAR DELTAT
+float tiempoAnt = clock();
+
 Render::Render(){
 	glEnable(GL_DEPTH_TEST);
 }
@@ -44,7 +47,12 @@ void Render::setupObject(Object* obj)
 		}
 		obj->mesh->vertexFisica[i].control = 0;
 	}
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * 100, tiempo, GL_DYNAMIC_DRAW);
+	float* DeltaT = new float(clock() - tiempoAnt);
+	tiempoAnt = clock();
+	printf("DELTAT: %f \n", *DeltaT);
+	//APAÑO PARA DELTAT NO FUNCIONA BIEN CON VALOR NORMAL
+	*DeltaT = 1.0;
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * 100, DeltaT, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constante);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
 	boList[obj->id]=bo;
@@ -57,7 +65,7 @@ void Render::updateObject(Object* obj) {
 	glGetNamedBufferSubData(1, sizeof(float), sizeof(float), constMuelle);
 	glGetNamedBufferSubData(1, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
 	printf("%f %f\n", *tiempo, *constMuelle);
-	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
+	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
 		, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]
 		, obj->mesh->vertexFisica[ayudapls].aceleracion[1], obj->mesh->vertexFisica[ayudapls].aceleracion[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[0]
 		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[1], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2]
