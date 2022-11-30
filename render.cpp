@@ -61,9 +61,9 @@ void Render::setupObject(Object* obj)
 void Render::updateObject(Object* obj) {
 	float* tiempo = new float(0);
 	float* constMuelle = new float(0);
-	glGetNamedBufferSubData(1, 0, sizeof(float), tiempo);
-	glGetNamedBufferSubData(1, sizeof(float), sizeof(float), constMuelle);
-	glGetNamedBufferSubData(1, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), tiempo);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constMuelle);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
 	printf("%f %f\n", *tiempo, *constMuelle);
 	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
 		, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]

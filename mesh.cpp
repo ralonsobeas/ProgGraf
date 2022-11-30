@@ -19,7 +19,7 @@ Mesh::Mesh(){
 		for (int y = 0; y < size; y++) {
 			
 			vertex_t v1;
-			v1.posicion = glm::vec4(0.0f + y, 0.0f + x, 0.0f, 1.0f);
+			v1.posicion = glm::vec4(0.0f + y, 0.0f, 0.0f + x, 1.0f);
 			//for (int j = 0; j < 8; j++) {
 				v1.vecinosCercanos[0] = y + (x - 1) * size - 1;
 				v1.vecinosCercanos[1] = y + (x - 1) * size;
