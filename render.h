@@ -20,6 +20,7 @@ private:
 	glm::mat4 proj=glm::mat4(1.0f);
 	std::map<int, bufferObject_t> boList;
 	int ayudapls = 0;
+	float DeltaT = 0;
 
 public:
 	Render();

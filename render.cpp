@@ -47,20 +47,25 @@ void Render::setupObject(Object* obj)
 		}
 		obj->mesh->vertexFisica[i].control = 0;
 	}
-	float* DeltaT = new float(clock() - tiempoAnt);
-	tiempoAnt = clock();
-	printf("DELTAT: %f \n", *DeltaT);
+
 	//APAÑO PARA DELTAT NO FUNCIONA BIEN CON VALOR NORMAL
-	*DeltaT = 1.0;
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * 100, DeltaT, GL_DYNAMIC_DRAW);
+	
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * 100, &DeltaT, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constante);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
 	boList[obj->id]=bo;
+	DeltaT = clock();
 }
 
 void Render::updateObject(Object* obj) {
+	DeltaT -= clock();
+	
+	DeltaT = -DeltaT / CLOCKS_PER_SEC;
+	printf("%f\n\n", DeltaT);
 	float* tiempo = new float(0);
 	float* constMuelle = new float(0);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float),  &DeltaT);
+	DeltaT = clock();
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), tiempo);
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constMuelle);
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);

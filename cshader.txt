@@ -4,7 +4,7 @@ layout(rgba32f, binding = 0) uniform image2D screen;
 struct matStruct {
 	int control;
     float posicion[4];
-	float aceleracion[4];
+	float velocidad[4];
 	int adyacentes[8];
 } newMaterial;
 
@@ -22,17 +22,17 @@ void main()
 	float pesoParticula = 1.0;
 
 	// SI SE PONE LA GRAVEDAD REAL CAE DEMASIADO RÁPIDO
-	//vec3 gravedad = vec3(0, -9.80665, 0);
-	vec3 gravedad = vec3(0, -0.001, 0);
+	vec3 gravedad = vec3(0, -9.80665, 0);
+	//vec3 gravedad = vec3(0, -0.001, 0);
 
 
 	vec3 fuerza;
 
 	// Ctes muelles (A*E/L, A = sección cilindro, E = módulo de elasticidad, L = longitud del muelle), LAS CTES ESTÁN INVENTADAS
-	float cteMuelleHorizontal = 0.0001;
-	float cteMuelleVertical = 0.0001;
-	float cteMuelleDiagonal = 0.00001;
-	float cteMuelleBending = 0.000001;
+	float cteMuelleHorizontal = 10;
+	float cteMuelleVertical = 10;
+	float cteMuelleDiagonal = 10;
+	float cteMuelleBending = 5;
 
 	// Gravedad
 	fuerza = gravedad * pesoParticula;
@@ -125,22 +125,28 @@ void main()
 	//float DeltaT = 1.0;
 	vec3 aceleracion =  fuerza / pesoParticula;
 
+
 	// Donde uso particula.aceleracion[0] deberia ser myarray[1].velocidad[0] (SE TIENE QUE CAMBIAR NOMBRE)
-	float nuevaPosicionX = particula.posicion[0] + particula.aceleracion[0] * DeltaT + 0.5 * aceleracion[0] * DeltaT * DeltaT;
-	float nuevaPosicionY = particula.posicion[1] + particula.aceleracion[1] * DeltaT + 0.5 * aceleracion[1] * DeltaT * DeltaT;
-	float nuevaPosicionZ = particula.posicion[2] + particula.aceleracion[2] * DeltaT + 0.5 * aceleracion[2] * DeltaT * DeltaT;
+	float nuevaPosicionX = particula.posicion[0] + particula.velocidad[0] * DeltaT + 0.5 * aceleracion[0] * DeltaT * DeltaT;
+	float nuevaPosicionY = particula.posicion[1] + particula.velocidad[1] * DeltaT + 0.5 * aceleracion[1] * DeltaT * DeltaT;
+	float nuevaPosicionZ = particula.posicion[2] + particula.velocidad[2] * DeltaT + 0.5 * aceleracion[2] * DeltaT * DeltaT;
+
 
 	// FAKEAR OBJETO COLISION
-	float planoColision[4] = {1.0,-1.0,5.0,-1.0};
+	float planoColision[4] = {1.9,-5.0,5.0,-1.0};
 
-	if(nuevaPosicionX >= planoColision[0] && nuevaPosicionX <= planoColision[2] && nuevaPosicionY > planoColision[1]){
+	if(nuevaPosicionX >= 1.9 && nuevaPosicionX <= 5.0 && nuevaPosicionY > -5.0){
 		particula.posicion[0] = nuevaPosicionX;
 		particula.posicion[1] = nuevaPosicionY;
+		//particula.posicion[2] = nuevaPosicionZ;
+		particula.velocidad[0] += aceleracion.x * DeltaT;
+		particula.velocidad[1] += aceleracion.y * DeltaT;
+		particula.velocidad[2] += aceleracion.z * DeltaT;
 	}
 
 	//particula.posicion[0] = nuevaPosicionX;
 	//particula.posicion[1] = nuevaPosicionY;
-	particula.posicion[2] = nuevaPosicionZ;
+	//particula.posicion[2] = nuevaPosicionZ;
 
 	myarray[idParticula] = particula;
 
