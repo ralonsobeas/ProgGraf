@@ -15,7 +15,7 @@ layout(binding = 3) buffer SSBO
 	matStruct myarray[];
 };
 
-vec3 calcularMuelle(int idVecina, vec3 posicionParticula, float cteMuelle);
+vec3 calcularMuelle(int idVecina, vec3 posicionParticula, float cteMuelle, float longMax, float longMin);
 
 void main()
 {
@@ -34,6 +34,7 @@ void main()
 	float cteMuelleDiagonal = 10;
 	float cteMuelleBending = 5;
 
+
 	// Gravedad
 	fuerza = gravedad * pesoParticula;
 
@@ -47,42 +48,42 @@ void main()
 	// Vecina 1 HORIZONTAL
 	int idVecina = particula.adyacentes[1];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleHorizontal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleHorizontal,1,0.9);
 	}
 	// Vecina 6 HORIZONTAL
 	idVecina = particula.adyacentes[6];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleHorizontal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleHorizontal,1,0.9);
 	}
 	// Vecina 3 VERTICAL 
 	idVecina = particula.adyacentes[3];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleVertical);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleVertical,1,0.9);
 	}
 	// Vecina 4 VERTICAL 
 	idVecina = particula.adyacentes[4];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleVertical);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleVertical,1,0.9);
 	}
 	// Vecina 0 DIAGONAL 
 	idVecina = particula.adyacentes[0];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal,1.41421356,1.3);
 	}
 	// Vecina 2 DIAGONAL 
 	idVecina = particula.adyacentes[2];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal,1.41421356,1.3);
 	}
 	// Vecina 5 DIAGONAL 
 	idVecina = particula.adyacentes[5];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal,1.41421356,1.3);
 	}
 	// Vecina 7 DIAGONAL 
 	idVecina = particula.adyacentes[7];
 	if(idVecina!=-1){
-		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal);
+		fuerza += calcularMuelle(idVecina,posicionParticula,cteMuelleDiagonal,1.41421356,1.3);
 	}
 
 	// Intento cálculo Bending
@@ -92,7 +93,7 @@ void main()
 	if(idVecina!=-1){
 		idBending = myarray[idVecina].adyacentes[1]; 
 		if(idBending!=-1){
-			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending,2.0,1.8);
 		}
 	}
 	// Vecina 6 HORIZONTAL
@@ -100,7 +101,7 @@ void main()
 	if(idVecina!=-1){
 		idBending = myarray[idVecina].adyacentes[6]; 
 		if(idBending!=-1){
-			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending,2.0,1.8);
 		}
 	}
 	// Vecina 3 VERTICAL 
@@ -108,7 +109,7 @@ void main()
 	if(idVecina!=-1){
 		idBending = myarray[idVecina].adyacentes[3]; 
 		if(idBending!=-1){
-			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending,2.0,1.8);
 		}
 	}
 	// Vecina 4 VERTICAL 
@@ -116,7 +117,7 @@ void main()
 	if(idVecina!=-1){
 		idBending = myarray[idVecina].adyacentes[4]; 
 		if(idBending!=-1){
-			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending);
+			fuerza += calcularMuelle(idBending,posicionParticula,cteMuelleBending,2.0,1.8);
 		}
 	}
 
@@ -139,75 +140,46 @@ void main()
 		particula.posicion[0] = nuevaPosicionX;
 		particula.posicion[1] = nuevaPosicionY;
 		//particula.posicion[2] = nuevaPosicionZ;
-		particula.velocidad[0] += aceleracion.x * DeltaT;
-		particula.velocidad[1] += aceleracion.y * DeltaT;
-		particula.velocidad[2] += aceleracion.z * DeltaT;
+		particula.velocidad[0] = aceleracion.x * DeltaT;
+		particula.velocidad[1] = aceleracion.y * DeltaT;
+		particula.velocidad[2] = aceleracion.z * DeltaT;
+	}else{
+		particula.velocidad[0] = 0;
+		particula.velocidad[1] = 0;
+		particula.velocidad[2] = 0;
 	}
 
-	//particula.posicion[0] = nuevaPosicionX;
-	//particula.posicion[1] = nuevaPosicionY;
-	//particula.posicion[2] = nuevaPosicionZ;
+	posicionParticula = vec3(particula.posicion[0],particula.posicion[1],particula.posicion[2]);
+	vec3 nuevaPosicionParticula = vec3(nuevaPosicionX,nuevaPosicionY,nuevaPosicionZ);
+
+	// RESTRICCIONES DE LONGITUD
+
+	//Calcular longitud entre las particulas vecinas y si excede de x dejarlo en el máximo?????
+
 
 	myarray[idParticula] = particula;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//vec4 pixel = vec4(0.075, 0.133, 0.173, 1.0);
-	//ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
-	
-	//ivec2 dims = imageSize(screen);
-	//float x = -(float(pixel_coords.x * 2 - dims.x) / dims.x); // transforms to [-1.0, 1.0]
-	//float y = -(float(pixel_coords.y * 2 - dims.y) / dims.y); // transforms to [-1.0, 1.0]
-	//float fov = 90.0;
-	//vec3 cam_o = vec3(0.0, 0.0, -tan(fov / 2.0));
-	//vec3 ray_o = vec3(x, y, 0.0);
-	//vec3 ray_d = normalize(ray_o - cam_o);
-	//vec3 sphere_c = vec3(0.0, 0.0, -5.0);
-	//float sphere_r = 1.0;
-	//vec3 o_c = ray_o - sphere_c;
-	//float b = dot(ray_d, o_c);
-	//float c = dot(o_c, o_c) - sphere_r * sphere_r;
-	//float intersectionState = b * b - c;
-	//vec3 intersection = ray_o + ray_d * (-b + sqrt(b * b - c));
-	//if (intersectionState >= 0.0)
-	//{
-		//pixel = vec4((normalize(intersection - sphere_c) + 1.0) / 2.0, 1.0);
-	//}
-	//imageStore(screen, pixel_coords, pixel);
-
-	//old_posicion[gl_GlobalInvocationID.x] = posicion[gl_GlobalInvocationID.x];
-	//float time = 0.0f;
-	
-	//time += tiempo;
-	//vec4 pos = posicion[gl_GlobalInvocationID.x];
-	//posicion[gl_GlobalInvocation.x] = posicion[gl_GlobalInvocation.x] * 2 - old_posicion[gl_GlobalInvocationID.x] + aceleracion[gl_GlobalInvocationID.x] * time * time;
-	//old_posicion[gl_GlobalInvocationID.x] = pos;
 }
 
 // Función que calcula la fuerza de un muelle
-vec3 calcularMuelle(int idVecina, vec3 posicionParticula, float cteMuelle){
+vec3 calcularMuelle(int idVecina, vec3 posicionParticula, float cteMuelle, float longMax, float longMin){
 	
 	vec3 posicionVecina = vec3(myarray[idVecina].posicion[0],myarray[idVecina].posicion[1],myarray[idVecina].posicion[2]);
 
-		
-	return -cteMuelle * (posicionParticula - posicionVecina);
+	vec3 longitud = posicionParticula - posicionVecina;
+
+	float proporcion;
+	float posicionx;
+	float posiciony;
+
+	// RESTRICCIONES DE LONGITUD
+	if(length(longitud) > longMax){
+		longitud *= (longMax/length(longitud));
+
+	}else if(length(longitud) < longMin){
+		longitud *= (longMin/length(longitud));
+	}
+
+	return -cteMuelle * longitud;
 }
 

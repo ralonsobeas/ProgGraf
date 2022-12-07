@@ -37,7 +37,8 @@ int main(int argc, char** argv)
 		std::cout << "ERROR iniciando glfw\n";
 
 	GLFWwindow* window = glfwCreateWindow(640, 480, "Prueba 1 GLFW", nullptr, nullptr);
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent( window );
+	
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 
