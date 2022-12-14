@@ -32,7 +32,7 @@ void Render::setupObject(Object* obj)
 	float* constante = new float(420);
 
 	obj->mesh->vertexFisica;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < obj->mesh->tamTela* obj->mesh->tamTela; i++) {
 		obj->mesh->vertexFisica[i].posicion[0] = temp[i].posicion.x;
 		obj->mesh->vertexFisica[i].posicion[1] = temp[i].posicion.y;
 		obj->mesh->vertexFisica[i].posicion[2] = temp[i].posicion.z;
@@ -50,9 +50,10 @@ void Render::setupObject(Object* obj)
 
 	//APAÑO PARA DELTAT NO FUNCIONA BIEN CON VALOR NORMAL
 	
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * 100, &DeltaT, GL_DYNAMIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * obj->mesh->tamTela* obj->mesh->tamTela + sizeof(int), &DeltaT, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constante);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2, sizeof(int), &obj->mesh->tamTela);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
 	boList[obj->id]=bo;
 	DeltaT = clock();
 }
@@ -68,7 +69,7 @@ void Render::updateObject(Object* obj) {
 	DeltaT = clock();
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), tiempo);
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constMuelle);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2, sizeof(vertexFisico_t) * 100, obj->mesh->vertexFisica);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
 	printf("%f %f\n", *tiempo, *constMuelle);
 	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
 		, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]
@@ -77,7 +78,7 @@ void Render::updateObject(Object* obj) {
 		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[3], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[4], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[5]
 		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[6], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[7]);
 	ayudapls++;
-	if (ayudapls >= 100) {
+	if (ayudapls >= obj->mesh->tamTela * obj->mesh->tamTela) {
 		ayudapls = 0;
 	}
 	for (int i = 0; i < obj->mesh->vertexList->size(); i++) {
@@ -137,7 +138,7 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	glUseProgram(obj->shader->computeProgramID);
 	//glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
 	// Dividir Shader en work groups uno por cada particula (SE DEBE CAMBIAR PARA CALCULO SI SE CAMBIA EL TAMAÑO DE TELA)
-	glDispatchCompute((unsigned int)10, (unsigned int)10, (unsigned int)1);
+	glDispatchCompute((unsigned int)obj->mesh->tamTela, (unsigned int)obj->mesh->tamTela, (unsigned int)1);
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	glUseProgram(obj->shader->programID);

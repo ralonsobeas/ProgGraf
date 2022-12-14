@@ -19,8 +19,9 @@ class Mesh{
 
 public:
 //atributos
+	int tamTela = 25;
 	std::vector<vertex_t>* vertexList;
-	vertexFisico_t vertexFisica[100];
+	vertexFisico_t* vertexFisica = new vertexFisico_t[tamTela*tamTela];
 	std::vector<int>* faceList;
 	GLShader* shader;
 	Texture* tex = nullptr;

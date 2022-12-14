@@ -10,7 +10,7 @@ Mesh::Mesh(){
 	faceList=new std::vector<int>();
 
 //añadir vértices
-	int size = 10;
+	int size = tamTela;
 	int i = 0;
 
 	for (int x = 0; x < size; x++) {

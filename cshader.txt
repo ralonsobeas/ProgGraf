@@ -12,6 +12,7 @@ layout(binding = 3) buffer SSBO
 {
 	float DeltaT;
 	float constMuelle;
+	int tamTela;
 	matStruct myarray[];
 };
 
@@ -40,7 +41,7 @@ void main()
 
 	//ID WORKGROUP ES uvec3 gl_WorkGroupID 
 	// Calculo del id de la particula dependiendo del workgroup (SE DEBE CAMBIAR PARA CÁLCULO SI SE CAMBIA EL TAMAÑO DE TELA)
-	uint idParticula = 10 * gl_WorkGroupID.y + gl_WorkGroupID.x;
+	uint idParticula = tamTela * gl_WorkGroupID.y + gl_WorkGroupID.x;
 	matStruct particula = myarray[idParticula];
 	// Cambiar a vec3 para facilitar cálculos
 	vec3 posicionParticula = vec3(particula.posicion[0],particula.posicion[1],particula.posicion[2]);
