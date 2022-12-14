@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 	Scene* scene = new Scene();
 	System::scene = scene;
 	//scene->setCamera(new Camera(glm::vec3(0,0,0.5),glm::vec3(0,0,0),perspective));
-	scene->addLight(new Light(glm::vec4(-3.0, 0, 6.0, 1), glm::vec4(0, 0, 0, 1)));
+	scene->addLight(new Light(glm::vec4(5.0, 0, 5.0, 1), glm::vec4(0, 0, 0, 1)));
 	scene->addLight(new Light(glm::vec4(3.0, 0, 6.0, 1), glm::vec4(0, 0, 0, 1)));
 	scene->setCamera(new Camera(glm::vec3(0, 0, 6.0), glm::vec3(cube->position.x, cube->position.y, cube->position.z), perspective));
 	scene->addObject(cube);
