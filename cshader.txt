@@ -135,7 +135,7 @@ void main()
 
 	// FAKEAR OBJETO COLISION
 	float planoColision[4] = {1.9,-5.0,5.0,-1.0};
-	vec3 centroEsfera = vec3(5,-5,5);
+	vec3 centroEsfera = vec3(9.5,-5,5);
 	float radioEsfera = 2.0f;
 
 	/*
@@ -166,16 +166,36 @@ void main()
 
 		vec3 fuerzaNormal =  -cos(angulo)*fuerza;
 
+		float coeficienteRozamiento = 2;
+
+		vec3 fuerzaRozamiento =  -sin(angulo)*fuerza/coeficienteRozamiento;
+
 		fuerza += fuerzaNormal;
+		fuerza += fuerzaRozamiento;
+		// Cambiar posición
+		// SE DEBE SABER EL DELTAT ENTRE CÁLCULOS, AHORA ESTÁ INVENTADO
+		//float DeltaT = 1.0;
+		aceleracion =  fuerza / pesoParticula;
+
+
+		// Donde uso particula.aceleracion[0] deberia ser myarray[1].velocidad[0] (SE TIENE QUE CAMBIAR NOMBRE)
+		nuevaPosicionX = particula.posicion[0] + particula.velocidad[0] * DeltaT + 0.5 * aceleracion[0] * DeltaT * DeltaT;
+		nuevaPosicionY = particula.posicion[1] + particula.velocidad[1] * DeltaT + 0.5 * aceleracion[1] * DeltaT * DeltaT;
+		nuevaPosicionZ = particula.posicion[2] + particula.velocidad[2] * DeltaT + 0.5 * aceleracion[2] * DeltaT * DeltaT;
 
 	}else{
-		particula.posicion[0] = nuevaPosicionX;
-		particula.posicion[1] = nuevaPosicionY;
-		particula.posicion[2] = nuevaPosicionZ;
+
 		particula.velocidad[0] = aceleracion.x * DeltaT;
 		particula.velocidad[1] = aceleracion.y * DeltaT;
 		particula.velocidad[2] = aceleracion.z * DeltaT;
 	}
+
+	particula.posicion[0] = nuevaPosicionX;
+	particula.posicion[1] = nuevaPosicionY;
+	particula.posicion[2] = nuevaPosicionZ;
+	particula.velocidad[0] = aceleracion.x * DeltaT;
+	particula.velocidad[1] = aceleracion.y * DeltaT;
+	particula.velocidad[2] = aceleracion.z * DeltaT;
 
 	// RESTRICCIONES DE LONGITUD
 
