@@ -197,10 +197,13 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	//glEnable(GL_ALPHA_TEST);
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	/*
 	if(obj->typeObject == CUBE_OBJ)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	*/
 	
 	glDrawElements(GL_TRIANGLES, obj->mesh->faceList->size(), GL_UNSIGNED_INT,nullptr);
 	

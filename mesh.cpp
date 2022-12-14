@@ -49,7 +49,13 @@ Mesh::Mesh(){
 					v1.vecinosCercanos[6] = -1;
 					v1.vecinosCercanos[7] = -1;
 				}
-				
+
+				v1.texCoord.x = (int)v1.posicion.x % 2;
+				v1.texCoord.y = (int)v1.posicion.y % 2;
+				v1.normal.x = 0;
+				v1.normal.y = 1;
+				v1.normal.z = 0;
+				v1.normal.w = 0;
 			//}
 			i++;
 			//v1.verticesAdyacentes[0] = 0;
@@ -70,14 +76,7 @@ Mesh::Mesh(){
 		}		
 	}
 	printf("%d\n", i);
-	/*
-	std::string vshader = "vshader.txt";
-	std::string fshader = "fshader.txt";
-	std::string textureFile = "data/front.png";
-
-	shader = new GLShader(vshader, fshader);
-	tex = new Texture(textureFile);
-	*/
+	
 
 	std::string vshader = "vshader.txt";
 	std::string fshader = "fshader.txt";
