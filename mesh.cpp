@@ -12,7 +12,6 @@ Mesh::Mesh(){
 //añadir vértices
 	int size = tamTela;
 	int i = 0;
-
 	for (int x = 0; x < size; x++) {
 		
 		//Creamos todos los vértices
@@ -99,6 +98,7 @@ Mesh::Mesh(){
 
 Mesh::Mesh(std::string fileName){
 
+	
 	vertexList=new std::vector<vertex_t>();
 	faceList=new std::vector<int>();
 //añadir vértices
@@ -199,7 +199,7 @@ void Mesh::loadFromFile(std::string fileName){
 	std::string fshader = "fshader.txt";
 	std::string textureFile = "data/front.png";
 
-	shader=new GLShader(vshader,fshader);
+	shader = new GLShader(vshader,fshader);
 	tex = new Texture(textureFile);
 	printf("Completado!");
 	

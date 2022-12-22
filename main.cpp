@@ -11,6 +11,7 @@
 #include "cube.h"
 #include "background.h"
 #include "light.h"
+#include "item.h"
 
 
 
@@ -48,21 +49,33 @@ int main(int argc, char** argv)
 		std::cout << "ERROR iniciando glew\n";
 
 	InputManager::init(window);
+	
+
 	Object* cube = new Cube();
 	cube->scale = glm::vec3(0.5f, 0.5f, 0.5f);
 	cube->position.z = 5.0f;
+
+	//Object* sphere = new Item("sphere.trg");
+	//sphere->position = glm::vec3(5.0f, 3.0f, 5.0f);
 
 
 	Render* render = new Render();
 	Scene* scene = new Scene();
 	System::scene = scene;
-	//scene->setCamera(new Camera(glm::vec3(0,0,0.5),glm::vec3(0,0,0),perspective));
+	scene->setCamera(new Camera(glm::vec3(0,0,0.5),glm::vec3(0,0,0),perspective));
 	scene->addLight(new Light(glm::vec4(5.0, 0, 5.0, 1), glm::vec4(0, 0, 0, 1)));
 	scene->addLight(new Light(glm::vec4(3.0, 0, 6.0, 1), glm::vec4(0, 0, 0, 1)));
-	scene->setCamera(new Camera(glm::vec3(0, 0, 6.0), glm::vec3(cube->position.x, cube->position.y, cube->position.z), perspective));
+	//scene->setCamera(new Camera(glm::vec3(0, 0, 6.0), glm::vec3(sphere->position.x, sphere->position.y, sphere->position.z), perspective));
+	//scene->setCamera(new Camera(glm::vec3(0, 0, 6.0), glm::vec3(cube->position.x, cube->position.y, cube->position.z), perspective));
+	
 	scene->addObject(cube);
+	//scene->addObject(sphere);
 
+	//render->setupObject(sphere);
 	render->setupObject(cube);
+	
+	
+	
 
 	while (!glfwWindowShouldClose(window))
 	{

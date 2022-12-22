@@ -195,6 +195,7 @@
     <None Include="bullet.trg" />
     <None Include="cube.trg" />
     <None Include="item.trg" />
+    <None Include="sphere.trg" />
     <None Include="triangle.trg" />
   </ItemGroup>
   <ItemGroup>

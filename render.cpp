@@ -17,80 +17,91 @@ void Render::setupObject(Object* obj)
 	glGenVertexArrays(1, &bo.abo);
 	glBindVertexArray(bo.abo);
 	
-	glGenBuffers(1,&bo.ssbo);
+	
 	glGenBuffers(1,&bo.vbo);
 	glGenBuffers(1,&bo.ibo);
+	if (obj->typeObject == CUBE_OBJ) {
+		glGenBuffers(1, &bo.ssbo);
 
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, bo.ssbo);
+	}
 	glBindBuffer(GL_ARRAY_BUFFER,bo.vbo);			
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,bo.ibo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER,bo.ssbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, bo.ssbo);
+	
 
+	if (obj->typeObject == CUBE_OBJ) {
+		vertex_t* temp = obj->mesh->vertexList->data();
+		float* tiempo = new float(69);
+		float* constante = new float(420);
 
-	vertex_t* temp = obj->mesh->vertexList->data();
-	float *tiempo = new float(69);
-	float* constante = new float(420);
-
-	obj->mesh->vertexFisica;
-	for (int i = 0; i < obj->mesh->tamTela* obj->mesh->tamTela; i++) {
-		obj->mesh->vertexFisica[i].posicion[0] = temp[i].posicion.x;
-		obj->mesh->vertexFisica[i].posicion[1] = temp[i].posicion.y;
-		obj->mesh->vertexFisica[i].posicion[2] = temp[i].posicion.z;
-		obj->mesh->vertexFisica[i].posicion[3] = temp[i].posicion.w;
-		obj->mesh->vertexFisica[i].aceleracion[0] = 0;
-		obj->mesh->vertexFisica[i].aceleracion[1] = 0;
-		obj->mesh->vertexFisica[i].aceleracion[2] = 0;
-		obj->mesh->vertexFisica[i].aceleracion[3] = 0;
-		for (int j = 0; j < 8; j++) {
-			obj->mesh->vertexFisica[i].vecinosCercanos[j] = temp[i].vecinosCercanos[j];
-			//printf("%d %d %d\n",i, j, templist1[i].verticesAdyacentes[j]);
+		obj->mesh->vertexFisica;
+		for (int i = 0; i < obj->mesh->tamTela * obj->mesh->tamTela; i++) {
+			obj->mesh->vertexFisica[i].posicion[0] = temp[i].posicion.x;
+			obj->mesh->vertexFisica[i].posicion[1] = temp[i].posicion.y;
+			obj->mesh->vertexFisica[i].posicion[2] = temp[i].posicion.z;
+			obj->mesh->vertexFisica[i].posicion[3] = temp[i].posicion.w;
+			obj->mesh->vertexFisica[i].aceleracion[0] = 0;
+			obj->mesh->vertexFisica[i].aceleracion[1] = 0;
+			obj->mesh->vertexFisica[i].aceleracion[2] = 0;
+			obj->mesh->vertexFisica[i].aceleracion[3] = 0;
+			for (int j = 0; j < 8; j++) {
+				obj->mesh->vertexFisica[i].vecinosCercanos[j] = temp[i].vecinosCercanos[j];
+				//printf("%d %d %d\n",i, j, templist1[i].verticesAdyacentes[j]);
+			}
+			obj->mesh->vertexFisica[i].control = 0;
 		}
-		obj->mesh->vertexFisica[i].control = 0;
-	}
 
-	//APAÑO PARA DELTAT NO FUNCIONA BIEN CON VALOR NORMAL
-	
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(vertexFisico_t) * obj->mesh->tamTela* obj->mesh->tamTela + sizeof(int), &DeltaT, GL_DYNAMIC_DRAW);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constante);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2, sizeof(int), &obj->mesh->tamTela);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float)*2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
-	boList[obj->id]=bo;
-	DeltaT = clock();
-}
-
-void Render::updateObject(Object* obj) {
-	DeltaT -= clock();
-	
-	DeltaT = -DeltaT / CLOCKS_PER_SEC;
-	printf("%f\n\n", DeltaT);
-	float* tiempo = new float(0);
-	float* constMuelle = new float(0);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float),  &DeltaT);
-	DeltaT = clock();
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), tiempo);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constMuelle);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
-	printf("%f %f\n", *tiempo, *constMuelle);
-	printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
-		, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]
-		, obj->mesh->vertexFisica[ayudapls].aceleracion[1], obj->mesh->vertexFisica[ayudapls].aceleracion[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[0]
-		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[1], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2]
-		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[3], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[4], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[5]
-		, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[6], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[7]);
-	ayudapls++;
-	if (ayudapls >= obj->mesh->tamTela * obj->mesh->tamTela) {
-		ayudapls = 0;
-	}
-	for (int i = 0; i < obj->mesh->vertexList->size(); i++) {
-		obj->mesh->vertexList->at(i).posicion.x = obj->mesh->vertexFisica[i].posicion[0];
-		obj->mesh->vertexList->at(i).posicion.y = obj->mesh->vertexFisica[i].posicion[1];
-		obj->mesh->vertexList->at(i).posicion.z = obj->mesh->vertexFisica[i].posicion[2];
-		obj->mesh->vertexList->at(i).posicion.w = obj->mesh->vertexFisica[i].posicion[3];
+		glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2 + sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela + sizeof(int), &DeltaT, GL_DYNAMIC_DRAW);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constante);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2, sizeof(int), &obj->mesh->tamTela);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
+		
+		DeltaT = clock();
 	}
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_t) * obj->mesh->vertexList->size(),
 		obj->mesh->vertexList->data(), GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * obj->mesh->faceList->size(),
 		obj->mesh->faceList->data(), GL_STATIC_DRAW);
+	boList[obj->id] = bo;
+}
+
+void Render::updateObject(Object* obj) {
+	if (obj->typeObject == CUBE_OBJ) {
+		DeltaT -= clock();
+
+		DeltaT = -DeltaT / CLOCKS_PER_SEC;
+		//printf("%f\n\n", DeltaT);
+		float* tiempo = new float(0);
+		float* constMuelle = new float(0);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), &DeltaT);
+		DeltaT = clock();
+		glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(float), tiempo);
+		glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float), sizeof(float), constMuelle);
+		glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * 2 + sizeof(int), sizeof(vertexFisico_t) * obj->mesh->tamTela * obj->mesh->tamTela, obj->mesh->vertexFisica);
+		/*printf("%f %f\n", *tiempo, *constMuelle);
+		printf("%d %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d\n", obj->mesh->vertexFisica[ayudapls].control, obj->mesh->vertexFisica[ayudapls].posicion[0]
+			, obj->mesh->vertexFisica[ayudapls].posicion[1], obj->mesh->vertexFisica[ayudapls].posicion[2], obj->mesh->vertexFisica[ayudapls].aceleracion[0]
+			, obj->mesh->vertexFisica[ayudapls].aceleracion[1], obj->mesh->vertexFisica[ayudapls].aceleracion[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[0]
+			, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[1], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[2]
+			, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[3], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[4], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[5]
+			, obj->mesh->vertexFisica[ayudapls].vecinosCercanos[6], obj->mesh->vertexFisica[ayudapls].vecinosCercanos[7]);
+			*/
+		ayudapls++;
+		if (ayudapls >= obj->mesh->tamTela * obj->mesh->tamTela) {
+			ayudapls = 0;
+		}
+		for (int i = 0; i < obj->mesh->vertexList->size(); i++) {
+			obj->mesh->vertexList->at(i).posicion.x = obj->mesh->vertexFisica[i].posicion[0];
+			obj->mesh->vertexList->at(i).posicion.y = obj->mesh->vertexFisica[i].posicion[1];
+			obj->mesh->vertexList->at(i).posicion.z = obj->mesh->vertexFisica[i].posicion[2];
+			obj->mesh->vertexList->at(i).posicion.w = obj->mesh->vertexFisica[i].posicion[3];
+		}
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_t) * obj->mesh->vertexList->size(),
+			obj->mesh->vertexList->data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * obj->mesh->faceList->size(),
+			obj->mesh->faceList->data(), GL_STATIC_DRAW);
+	}
 
 }
 
@@ -133,14 +144,19 @@ void Render::drawObjectGL4(Object* obj, Scene *scene){
 	glBindVertexArray(bo.abo);
 	glBindBuffer(GL_ARRAY_BUFFER, bo.vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bo.ibo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
+	
+	if (obj->typeObject == CUBE_OBJ) {
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, bo.ssbo);
 
-	glUseProgram(obj->shader->computeProgramID);
-	//glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
-	// Dividir Shader en work groups uno por cada particula (SE DEBE CAMBIAR PARA CALCULO SI SE CAMBIA EL TAMAÑO DE TELA)
-	glDispatchCompute((unsigned int)obj->mesh->tamTela, (unsigned int)obj->mesh->tamTela, (unsigned int)1);
+		glUseProgram(obj->shader->computeProgramID);
+		//glDispatchCompute(ceil(640 / 640), ceil(480 / 480), 1);
+		// Dividir Shader en work groups uno por cada particula (SE DEBE CAMBIAR PARA CALCULO SI SE CAMBIA EL TAMAÑO DE TELA)
+		glDispatchCompute((unsigned int)obj->mesh->tamTela, (unsigned int)obj->mesh->tamTela, (unsigned int)1);
+		
+
+		
+	}
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-
 	glUseProgram(obj->shader->programID);
 
 	unsigned int vpos=0;
