@@ -30,10 +30,10 @@ void main()
 	vec3 fuerza;
 
 	// Ctes muelles (A*E/L, A = sección cilindro, E = módulo de elasticidad, L = longitud del muelle), LAS CTES ESTÁN INVENTADAS
-	float cteMuelleHorizontal = 10;
-	float cteMuelleVertical = 10;
-	float cteMuelleDiagonal = 14.14;
-	float cteMuelleBending = 5;
+	float cteMuelleHorizontal = 20;
+	float cteMuelleVertical = 20;
+	float cteMuelleDiagonal = 28.28;
+	float cteMuelleBending = 10;
 
 
 	// Gravedad

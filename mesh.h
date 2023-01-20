@@ -19,7 +19,7 @@ class Mesh{
 
 public:
 //atributos
-	int tamTela = 10;
+	int tamTela = 50;
 	std::vector<vertex_t>* vertexList;
 	vertexFisico_t* vertexFisica = new vertexFisico_t[tamTela*tamTela];
 	std::vector<int>* faceList;
